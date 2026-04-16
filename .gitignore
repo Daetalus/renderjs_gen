@@ -3,3 +3,4 @@ __pycache__/
 venv/
 .venv/
 chroma_db/
+step1_prompt_bundle.json
