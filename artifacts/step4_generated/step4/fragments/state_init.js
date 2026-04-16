@@ -1,0 +1,1 @@
+    .setState({"username": "", "password": "", "error_message": "", "is_submitting": false})

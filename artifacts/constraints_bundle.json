@@ -1,0 +1,291 @@
+{
+  "must_use_rsvp_queue": true,
+  "must_not_use_then": true,
+  "must_not_use_id_attr": true,
+  "must_not_use_global_dom": true,
+  "must_not_call_external_changestate": true,
+  "must_not_use_global_vars": true,
+  "must_return_promise_chains": true,
+  "must_use_json_compatible_args": true,
+  "dom_writes_only_in_onstatechange": true,
+  "component_scope": "single_gadget",
+  "event_naming": "normalized_snake_case",
+  "field_groups_activated": [
+    "layout_html",
+    "state_logic",
+    "event_binding",
+    "error_boundary"
+  ],
+  "forbidden_patterns": [
+    ".then(",
+    "id=",
+    "document.querySelector",
+    "document.querySelectorAll",
+    "document.getElementById",
+    "document.body",
+    "window.X =",
+    "innerHTML =",
+    "outerHTML =",
+    "this.state =",
+    "state = state ||",
+    ".addEventListener(",
+    "onclick =",
+    "throw new Error("
+  ],
+  "canon_rules": [
+    {
+      "rule_id": "must_not_call_external_changestate",
+      "title": "Only mutate state through gadget.changeState",
+      "summary": "Do not call changeState on external gadgets or globals.",
+      "severity": "blocking",
+      "applies_to": [
+        "state_logic",
+        "spec.state"
+      ],
+      "official_api_names": [
+        "changeState"
+      ]
+    },
+    {
+      "rule_id": "dom_writes_only_in_onstatechange",
+      "title": "Keep DOM writes inside onStateChange",
+      "summary": "RenderJS DOM mutation should happen in onStateChange.",
+      "severity": "blocking",
+      "applies_to": [
+        "ui_areas",
+        "layout_html",
+        "state_logic",
+        "spec.state"
+      ],
+      "official_api_names": [
+        "onStateChange"
+      ]
+    }
+  ],
+  "local_rules": [
+    {
+      "rule_id": "forbidden_pattern_1",
+      "title": "Forbidden code pattern: .then(",
+      "summary": "Generated code must not contain `.then(`.",
+      "severity": "blocking",
+      "applies_to": [
+        "ui_areas",
+        "layout_html",
+        "state_logic",
+        "spec.state",
+        "event_binding",
+        "error_boundary"
+      ],
+      "official_api_names": [],
+      "forbidden_pattern": ".then("
+    },
+    {
+      "rule_id": "forbidden_pattern_2",
+      "title": "Forbidden code pattern: id=",
+      "summary": "Generated code must not contain `id=`.",
+      "severity": "blocking",
+      "applies_to": [
+        "ui_areas",
+        "layout_html",
+        "state_logic",
+        "spec.state",
+        "event_binding",
+        "error_boundary"
+      ],
+      "official_api_names": [],
+      "forbidden_pattern": "id="
+    },
+    {
+      "rule_id": "forbidden_pattern_3",
+      "title": "Forbidden code pattern: document.querySelector",
+      "summary": "Generated code must not contain `document.querySelector`.",
+      "severity": "blocking",
+      "applies_to": [
+        "ui_areas",
+        "layout_html",
+        "state_logic",
+        "spec.state",
+        "event_binding",
+        "error_boundary"
+      ],
+      "official_api_names": [],
+      "forbidden_pattern": "document.querySelector"
+    },
+    {
+      "rule_id": "forbidden_pattern_4",
+      "title": "Forbidden code pattern: document.querySelectorAll",
+      "summary": "Generated code must not contain `document.querySelectorAll`.",
+      "severity": "blocking",
+      "applies_to": [
+        "ui_areas",
+        "layout_html",
+        "state_logic",
+        "spec.state",
+        "event_binding",
+        "error_boundary"
+      ],
+      "official_api_names": [],
+      "forbidden_pattern": "document.querySelectorAll"
+    },
+    {
+      "rule_id": "forbidden_pattern_5",
+      "title": "Forbidden code pattern: document.getElementById",
+      "summary": "Generated code must not contain `document.getElementById`.",
+      "severity": "blocking",
+      "applies_to": [
+        "ui_areas",
+        "layout_html",
+        "state_logic",
+        "spec.state",
+        "event_binding",
+        "error_boundary"
+      ],
+      "official_api_names": [],
+      "forbidden_pattern": "document.getElementById"
+    },
+    {
+      "rule_id": "forbidden_pattern_6",
+      "title": "Forbidden code pattern: document.body",
+      "summary": "Generated code must not contain `document.body`.",
+      "severity": "blocking",
+      "applies_to": [
+        "ui_areas",
+        "layout_html",
+        "state_logic",
+        "spec.state",
+        "event_binding",
+        "error_boundary"
+      ],
+      "official_api_names": [],
+      "forbidden_pattern": "document.body"
+    },
+    {
+      "rule_id": "forbidden_pattern_7",
+      "title": "Forbidden code pattern: window.X =",
+      "summary": "Generated code must not contain `window.X =`.",
+      "severity": "blocking",
+      "applies_to": [
+        "ui_areas",
+        "layout_html",
+        "state_logic",
+        "spec.state",
+        "event_binding",
+        "error_boundary"
+      ],
+      "official_api_names": [],
+      "forbidden_pattern": "window.X ="
+    },
+    {
+      "rule_id": "forbidden_pattern_8",
+      "title": "Forbidden code pattern: innerHTML =",
+      "summary": "Generated code must not contain `innerHTML =`.",
+      "severity": "blocking",
+      "applies_to": [
+        "ui_areas",
+        "layout_html",
+        "state_logic",
+        "spec.state",
+        "event_binding",
+        "error_boundary"
+      ],
+      "official_api_names": [],
+      "forbidden_pattern": "innerHTML ="
+    },
+    {
+      "rule_id": "forbidden_pattern_9",
+      "title": "Forbidden code pattern: outerHTML =",
+      "summary": "Generated code must not contain `outerHTML =`.",
+      "severity": "blocking",
+      "applies_to": [
+        "ui_areas",
+        "layout_html",
+        "state_logic",
+        "spec.state",
+        "event_binding",
+        "error_boundary"
+      ],
+      "official_api_names": [],
+      "forbidden_pattern": "outerHTML ="
+    },
+    {
+      "rule_id": "forbidden_pattern_10",
+      "title": "Forbidden code pattern: this.state =",
+      "summary": "Generated code must not contain `this.state =`.",
+      "severity": "blocking",
+      "applies_to": [
+        "ui_areas",
+        "layout_html",
+        "state_logic",
+        "spec.state",
+        "event_binding",
+        "error_boundary"
+      ],
+      "official_api_names": [],
+      "forbidden_pattern": "this.state ="
+    },
+    {
+      "rule_id": "forbidden_pattern_11",
+      "title": "Forbidden code pattern: state = state ||",
+      "summary": "Generated code must not contain `state = state ||`.",
+      "severity": "blocking",
+      "applies_to": [
+        "ui_areas",
+        "layout_html",
+        "state_logic",
+        "spec.state",
+        "event_binding",
+        "error_boundary"
+      ],
+      "official_api_names": [],
+      "forbidden_pattern": "state = state ||"
+    },
+    {
+      "rule_id": "forbidden_pattern_12",
+      "title": "Forbidden code pattern: .addEventListener(",
+      "summary": "Generated code must not contain `.addEventListener(`.",
+      "severity": "blocking",
+      "applies_to": [
+        "ui_areas",
+        "layout_html",
+        "state_logic",
+        "spec.state",
+        "event_binding",
+        "error_boundary"
+      ],
+      "official_api_names": [],
+      "forbidden_pattern": ".addEventListener("
+    },
+    {
+      "rule_id": "forbidden_pattern_13",
+      "title": "Forbidden code pattern: onclick =",
+      "summary": "Generated code must not contain `onclick =`.",
+      "severity": "blocking",
+      "applies_to": [
+        "ui_areas",
+        "layout_html",
+        "state_logic",
+        "spec.state",
+        "event_binding",
+        "error_boundary"
+      ],
+      "official_api_names": [],
+      "forbidden_pattern": "onclick ="
+    },
+    {
+      "rule_id": "forbidden_pattern_14",
+      "title": "Forbidden code pattern: throw new Error(",
+      "summary": "Generated code must not contain `throw new Error(`.",
+      "severity": "blocking",
+      "applies_to": [
+        "ui_areas",
+        "layout_html",
+        "state_logic",
+        "spec.state",
+        "event_binding",
+        "error_boundary"
+      ],
+      "official_api_names": [],
+      "forbidden_pattern": "throw new Error("
+    }
+  ]
+}

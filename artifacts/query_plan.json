@@ -1,0 +1,49 @@
+{
+  "field_groups_activated": [
+    "layout_html",
+    "state_logic",
+    "event_binding",
+    "error_boundary"
+  ],
+  "api_hints": [
+    "rJS(window)",
+    "setState",
+    "changeState",
+    "onStateChange",
+    "onEvent"
+  ],
+  "queries": [
+    {
+      "intent": "rules",
+      "query_text": "RenderJS rules for layout_html state_logic event_binding error_boundary",
+      "filter": {
+        "doc_type": "rule"
+      },
+      "n_results": 5
+    },
+    {
+      "intent": "api",
+      "query_text": "RenderJS API rJS(window) setState changeState onStateChange onEvent",
+      "filter": {
+        "doc_type": "api"
+      },
+      "n_results": 5
+    },
+    {
+      "intent": "event_pattern",
+      "query_text": "RenderJS event handling pattern form",
+      "filter": {
+        "doc_type": "pattern"
+      },
+      "n_results": 3
+    },
+    {
+      "intent": "example",
+      "query_text": "RenderJS form example",
+      "filter": {
+        "doc_type": "example"
+      },
+      "n_results": 2
+    }
+  ]
+}

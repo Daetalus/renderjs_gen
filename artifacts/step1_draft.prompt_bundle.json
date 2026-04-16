@@ -1,0 +1,468 @@
+{
+  "requirement": "Create a login form with username, password, and a submit button.",
+  "messages": [
+    {
+      "role": "system",
+      "content": "你是 RenderJS 页面规格分析器。把用户需求转成 ComponentSpecDraft JSON。\n\n核心约束：\n- 单页单 gadget，状态驱动渲染\n- 不发明框架 API，不用全局 DOM\n- 信息不足时做最保守假设，优先最小可用页面\n- 不确定项写 uncertainties，待确认项写 todo_markers\n- 可退化功能写 allowed_degradation\n\n字段填写指引：\n- task_type: display|form|list|detail|dashboard|launcher|unknown\n- page_goal: 一句话说明页面目标\n- state_schema: 每个状态字段独立条目，给出 name/field_type/default/description。布尔状态用于 UI 切换（如 is_loading），字符串用于输入值和错误信息\n- events: 只列需要绑定的 DOM 事件（submit/click 等），不列生命周期\n- ui_plan: 按页面区域拆分，每个区域一个 component_kind\n- dom_requirements: 给出 selector_hint（.class 格式）和 element 标签\n- async_requirements: 仅当事件触发异步操作时填写\n- child_gadget_needs / acquisition_needs: 无需求时留空数组\n\n组件白名单：\npage, panel, section, form, fieldset, input, textarea, select, checkbox, radio, button, list, list_item, table, card, banner, notice, dialog, toolbar, tabs, pagination, empty_state, loading_state\n\n只输出 JSON，不输出其他文字"
+    },
+    {
+      "role": "user",
+      "content": "需求：\nCreate a login form with username, password, and a submit button. Show loading during submit and error on failure."
+    },
+    {
+      "role": "assistant",
+      "content": "{\"task_type\": \"form\", \"page_goal\": \"Login form with submit, loading, and error feedback.\", \"assumptions\": [\"Only username and password fields needed.\", \"Login request deferred to async implementation.\"], \"uncertainties\": [\"No spec for remember-me option.\", \"No spec for post-login destination.\"], \"degradation_policy\": {\"mode\": \"strict\", \"summary\": \"Block submit on missing input; show error on failure.\"}, \"ui_plan\": [{\"area_id\": \"login_form\", \"title\": \"Login Form\", \"component_kind\": \"form\", \"purpose\": \"Collect credentials and submit\"}, {\"area_id\": \"feedback\", \"title\": \"Feedback\", \"component_kind\": \"notice\", \"purpose\": \"Show error or status\"}], \"component_whitelist_used\": [\"page\", \"form\", \"input\", \"button\", \"notice\", \"loading_state\"], \"state_schema\": [{\"name\": \"username\", \"field_type\": \"string\", \"default\": \"\", \"required\": true, \"description\": \"Username input\"}, {\"name\": \"password\", \"field_type\": \"string\", \"default\": \"\", \"required\": true, \"description\": \"Password input\"}, {\"name\": \"is_submitting\", \"field_type\": \"boolean\", \"default\": false, \"required\": true, \"description\": \"Submit in progress\"}, {\"name\": \"error_message\", \"field_type\": \"string\", \"default\": \"\", \"required\": true, \"description\": \"Error text\"}], \"events\": [{\"name\": \"submit_login\", \"trigger\": \"submit\", \"source_area_id\": \"login_form\", \"handler_goal\": \"Validate and start login\", \"updates_state\": [\"is_submitting\", \"error_message\"], \"async_required\": true}], \"dom_requirements\": [{\"selector_hint\": \".login-form\", \"element\": \"form\", \"purpose\": \"Login inputs and submit button\", \"required\": true}, {\"selector_hint\": \".login-error\", \"element\": \"div\", \"purpose\": \"Error messages\", \"required\": true}], \"data_requirements\": [], \"async_requirements\": [{\"name\": \"login_request\", \"trigger\": \"submit_login\", \"success_state\": \"is_submitting=false\", \"error_state\": \"is_submitting=false,error_message=error\", \"fallback\": \"keep values and allow retry\"}], \"child_gadget_needs\": [], \"acquisition_needs\": [], \"allowed_degradation\": [{\"condition\": \"service unavailable\", \"fallback\": \"show error and allow retry\"}], \"todo_markers\": [\"Confirm post-login navigation.\"]}"
+    },
+    {
+      "role": "user",
+      "content": "需求：\nCreate a login form with username, password, and a submit button."
+    }
+  ],
+  "json_schema": {
+    "$defs": {
+      "AcquisitionNeed": {
+        "additionalProperties": false,
+        "properties": {
+          "acquisition_name": {
+            "minLength": 1,
+            "title": "Acquisition Name",
+            "type": "string"
+          },
+          "methods": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Methods",
+            "type": "array"
+          },
+          "purpose": {
+            "default": "",
+            "title": "Purpose",
+            "type": "string"
+          }
+        },
+        "required": [
+          "acquisition_name"
+        ],
+        "title": "AcquisitionNeed",
+        "type": "object"
+      },
+      "AllowedDegradation": {
+        "additionalProperties": false,
+        "properties": {
+          "condition": {
+            "minLength": 1,
+            "title": "Condition",
+            "type": "string"
+          },
+          "fallback": {
+            "minLength": 1,
+            "title": "Fallback",
+            "type": "string"
+          }
+        },
+        "required": [
+          "condition",
+          "fallback"
+        ],
+        "title": "AllowedDegradation",
+        "type": "object"
+      },
+      "AsyncRequirement": {
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "minLength": 1,
+            "title": "Name",
+            "type": "string"
+          },
+          "trigger": {
+            "minLength": 1,
+            "title": "Trigger",
+            "type": "string"
+          },
+          "success_state": {
+            "default": "",
+            "title": "Success State",
+            "type": "string"
+          },
+          "error_state": {
+            "default": "",
+            "title": "Error State",
+            "type": "string"
+          },
+          "fallback": {
+            "default": "",
+            "title": "Fallback",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "trigger"
+        ],
+        "title": "AsyncRequirement",
+        "type": "object"
+      },
+      "ChildGadgetNeed": {
+        "additionalProperties": false,
+        "properties": {
+          "slot": {
+            "minLength": 1,
+            "title": "Slot",
+            "type": "string"
+          },
+          "purpose": {
+            "default": "",
+            "title": "Purpose",
+            "type": "string"
+          },
+          "required_methods": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Required Methods",
+            "type": "array"
+          }
+        },
+        "required": [
+          "slot"
+        ],
+        "title": "ChildGadgetNeed",
+        "type": "object"
+      },
+      "DOMRequirement": {
+        "additionalProperties": false,
+        "properties": {
+          "selector_hint": {
+            "default": "",
+            "title": "Selector Hint",
+            "type": "string"
+          },
+          "element": {
+            "minLength": 1,
+            "title": "Element",
+            "type": "string"
+          },
+          "purpose": {
+            "default": "",
+            "title": "Purpose",
+            "type": "string"
+          },
+          "required": {
+            "default": true,
+            "title": "Required",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "element"
+        ],
+        "title": "DOMRequirement",
+        "type": "object"
+      },
+      "DataRequirement": {
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "minLength": 1,
+            "title": "Name",
+            "type": "string"
+          },
+          "source": {
+            "default": "",
+            "title": "Source",
+            "type": "string"
+          },
+          "shape": {
+            "default": "",
+            "title": "Shape",
+            "type": "string"
+          },
+          "required": {
+            "default": false,
+            "title": "Required",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "title": "DataRequirement",
+        "type": "object"
+      },
+      "DegradationPolicy": {
+        "additionalProperties": false,
+        "properties": {
+          "mode": {
+            "default": "conservative",
+            "enum": [
+              "strict",
+              "conservative",
+              "graceful"
+            ],
+            "title": "Mode",
+            "type": "string"
+          },
+          "summary": {
+            "default": "",
+            "title": "Summary",
+            "type": "string"
+          }
+        },
+        "title": "DegradationPolicy",
+        "type": "object"
+      },
+      "EventDraft": {
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "minLength": 1,
+            "title": "Name",
+            "type": "string"
+          },
+          "trigger": {
+            "minLength": 1,
+            "title": "Trigger",
+            "type": "string"
+          },
+          "source_area_id": {
+            "default": "",
+            "title": "Source Area Id",
+            "type": "string"
+          },
+          "handler_goal": {
+            "default": "",
+            "title": "Handler Goal",
+            "type": "string"
+          },
+          "updates_state": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Updates State",
+            "type": "array"
+          },
+          "async_required": {
+            "default": false,
+            "title": "Async Required",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "name",
+          "trigger"
+        ],
+        "title": "EventDraft",
+        "type": "object"
+      },
+      "StateFieldDraft": {
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "minLength": 1,
+            "title": "Name",
+            "type": "string"
+          },
+          "field_type": {
+            "default": "unknown",
+            "enum": [
+              "string",
+              "number",
+              "boolean",
+              "object",
+              "array",
+              "enum",
+              "unknown"
+            ],
+            "title": "Field Type",
+            "type": "string"
+          },
+          "default": {
+            "anyOf": [
+              {},
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Default"
+          },
+          "required": {
+            "default": false,
+            "title": "Required",
+            "type": "boolean"
+          },
+          "description": {
+            "default": "",
+            "title": "Description",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "title": "StateFieldDraft",
+        "type": "object"
+      },
+      "UIPlanItem": {
+        "additionalProperties": false,
+        "properties": {
+          "area_id": {
+            "minLength": 1,
+            "title": "Area Id",
+            "type": "string"
+          },
+          "title": {
+            "minLength": 1,
+            "title": "Title",
+            "type": "string"
+          },
+          "component_kind": {
+            "minLength": 1,
+            "title": "Component Kind",
+            "type": "string"
+          },
+          "purpose": {
+            "default": "",
+            "title": "Purpose",
+            "type": "string"
+          }
+        },
+        "required": [
+          "area_id",
+          "title",
+          "component_kind"
+        ],
+        "title": "UIPlanItem",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "task_type": {
+        "enum": [
+          "display",
+          "form",
+          "list",
+          "detail",
+          "dashboard",
+          "launcher",
+          "unknown"
+        ],
+        "title": "Task Type",
+        "type": "string"
+      },
+      "page_goal": {
+        "minLength": 1,
+        "title": "Page Goal",
+        "type": "string"
+      },
+      "assumptions": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Assumptions",
+        "type": "array"
+      },
+      "uncertainties": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Uncertainties",
+        "type": "array"
+      },
+      "degradation_policy": {
+        "$ref": "#/$defs/DegradationPolicy"
+      },
+      "ui_plan": {
+        "items": {
+          "$ref": "#/$defs/UIPlanItem"
+        },
+        "title": "Ui Plan",
+        "type": "array"
+      },
+      "component_whitelist_used": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Component Whitelist Used",
+        "type": "array"
+      },
+      "state_schema": {
+        "items": {
+          "$ref": "#/$defs/StateFieldDraft"
+        },
+        "title": "State Schema",
+        "type": "array"
+      },
+      "events": {
+        "items": {
+          "$ref": "#/$defs/EventDraft"
+        },
+        "title": "Events",
+        "type": "array"
+      },
+      "dom_requirements": {
+        "items": {
+          "$ref": "#/$defs/DOMRequirement"
+        },
+        "title": "Dom Requirements",
+        "type": "array"
+      },
+      "data_requirements": {
+        "items": {
+          "$ref": "#/$defs/DataRequirement"
+        },
+        "title": "Data Requirements",
+        "type": "array"
+      },
+      "async_requirements": {
+        "items": {
+          "$ref": "#/$defs/AsyncRequirement"
+        },
+        "title": "Async Requirements",
+        "type": "array"
+      },
+      "child_gadget_needs": {
+        "items": {
+          "$ref": "#/$defs/ChildGadgetNeed"
+        },
+        "title": "Child Gadget Needs",
+        "type": "array"
+      },
+      "acquisition_needs": {
+        "items": {
+          "$ref": "#/$defs/AcquisitionNeed"
+        },
+        "title": "Acquisition Needs",
+        "type": "array"
+      },
+      "allowed_degradation": {
+        "items": {
+          "$ref": "#/$defs/AllowedDegradation"
+        },
+        "title": "Allowed Degradation",
+        "type": "array"
+      },
+      "todo_markers": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Todo Markers",
+        "type": "array"
+      }
+    },
+    "required": [
+      "task_type",
+      "page_goal"
+    ],
+    "title": "ComponentSpecDraft",
+    "type": "object"
+  },
+  "prompt_versions": {
+    "step1_system.md": "7bca7628c5391e5895615c22f8baaff5690be432e24f538c6056912dc6156ed4",
+    "step1_fewshots.json": "fa323569453b769147bb6ab355e695b457d2056596358d4485b21c4748f956fb",
+    "step1_user_template.md": "fd19d746ecb2b2434f30f910308e6db6343bb3a144447262a5179d9c4e729814"
+  }
+}

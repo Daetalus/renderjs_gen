@@ -1,0 +1,62 @@
+{
+  "actual_classes": [
+    "button",
+    "error-msg",
+    "form",
+    "form-group",
+    "form-label",
+    "input",
+    "login-form",
+    "login-gadget-wrapper",
+    "notice",
+    "password-input",
+    "submit-btn",
+    "username-input"
+  ],
+  "selector_map": {},
+  "missing_selectors": [],
+  "form_elements": [
+    {
+      "tag": "form",
+      "class": "login-form form"
+    },
+    {
+      "tag": "input",
+      "type": "text",
+      "class": "username-input input"
+    },
+    {
+      "tag": "input",
+      "type": "password",
+      "class": "password-input input"
+    },
+    {
+      "tag": "button",
+      "type": "submit",
+      "class": "submit-btn button"
+    }
+  ],
+  "data_attrs": [
+    [
+      "area",
+      "login_form"
+    ],
+    [
+      "area",
+      "username_input"
+    ],
+    [
+      "area",
+      "password_input"
+    ],
+    [
+      "area",
+      "submit_btn"
+    ],
+    [
+      "area",
+      "error_msg"
+    ]
+  ],
+  "dom_html": "<div class=\"login-gadget-wrapper\">\n  <form class=\"login-form form\" data-area=\"login_form\">\n    <div class=\"form-group\">\n      <label class=\"form-label\">Username</label>\n      <input type=\"text\" class=\"username-input input\" data-area=\"username_input\" placeholder=\"Username\">\n    </div>\n    <div class=\"form-group\">\n      <label class=\"form-label\">Password</label>\n      <input type=\"password\" class=\"password-input input\" data-area=\"password_input\" placeholder=\"Password\">\n    </div>\n    <button type=\"submit\" class=\"submit-btn button\" data-area=\"submit_btn\">Submit</button>\n  </form>\n  <div class=\"error-msg notice\" data-area=\"error_msg\"></div>\n</div>"
+}

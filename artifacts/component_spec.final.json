@@ -1,0 +1,147 @@
+{
+  "task_type": "form",
+  "page_goal": "A minimal login form with username, password, and a submit button.",
+  "assumptions": [],
+  "uncertainties": [],
+  "degradation_policy": {
+    "mode": "conservative",
+    "summary": ""
+  },
+  "ui_plan": [
+    {
+      "area_id": "login_form",
+      "title": "Login Form",
+      "component_kind": "form",
+      "purpose": "Collect username and password"
+    },
+    {
+      "area_id": "username_input",
+      "title": "Username Input",
+      "component_kind": "input",
+      "purpose": "Text input for username"
+    },
+    {
+      "area_id": "password_input",
+      "title": "Password Input",
+      "component_kind": "input",
+      "purpose": "Password input for password"
+    },
+    {
+      "area_id": "submit_btn",
+      "title": "Submit Btn",
+      "component_kind": "button",
+      "purpose": "Submit the form"
+    },
+    {
+      "area_id": "error_msg",
+      "title": "Error Msg",
+      "component_kind": "notice",
+      "purpose": "Display error feedback"
+    }
+  ],
+  "component_whitelist_used": [
+    "form",
+    "input",
+    "button",
+    "notice"
+  ],
+  "state_schema": [
+    {
+      "name": "username",
+      "field_type": "string",
+      "default": "",
+      "required": false,
+      "description": "The user's input for username"
+    },
+    {
+      "name": "password",
+      "field_type": "string",
+      "default": "",
+      "required": false,
+      "description": "The user's input for password"
+    },
+    {
+      "name": "error_message",
+      "field_type": "string",
+      "default": "",
+      "required": false,
+      "description": "Auto-added state for Step2 guard: error_message"
+    },
+    {
+      "name": "is_submitting",
+      "field_type": "boolean",
+      "default": false,
+      "required": false,
+      "description": "Auto-added state for Step2 guard: is_submitting"
+    }
+  ],
+  "events": [
+    {
+      "name": "on_submit_login_area",
+      "trigger": "submit",
+      "source_area_id": "login_area",
+      "handler_goal": "Submit credentials",
+      "updates_state": [],
+      "async_required": false
+    }
+  ],
+  "dom_requirements": [
+    {
+      "selector_hint": ".login-form",
+      "element": "form",
+      "purpose": "Collect username and password",
+      "required": true
+    },
+    {
+      "selector_hint": ".username-input",
+      "element": "input",
+      "purpose": "Text input for username",
+      "required": true
+    },
+    {
+      "selector_hint": ".password-input",
+      "element": "input",
+      "purpose": "Password input for password",
+      "required": true
+    },
+    {
+      "selector_hint": ".submit-btn",
+      "element": "button",
+      "purpose": "Submit the form",
+      "required": true
+    },
+    {
+      "selector_hint": ".error-msg",
+      "element": "div",
+      "purpose": "Display error feedback",
+      "required": true
+    },
+    {
+      "selector_hint": ".login-area",
+      "element": "section",
+      "purpose": "Primary area for event source 'login_area'",
+      "required": true
+    },
+    {
+      "selector_hint": ".error-message",
+      "element": "div",
+      "purpose": "Inline error feedback",
+      "required": true
+    }
+  ],
+  "data_requirements": [],
+  "async_requirements": [],
+  "child_gadget_needs": [],
+  "acquisition_needs": [],
+  "allowed_degradation": [
+    {
+      "condition": "No async backend provided",
+      "fallback": "Form performs local validation only"
+    }
+  ],
+  "todo_markers": [
+    "Add error message state",
+    "Add loading state",
+    "Add 'remember me' checkbox"
+  ]
+}

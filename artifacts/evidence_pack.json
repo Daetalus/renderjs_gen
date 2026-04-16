@@ -1,0 +1,171 @@
+{
+  "items": [
+    {
+      "id": "rules_api_003",
+      "doc_type": "rule",
+      "field_groups": [
+        "state_logic",
+        "event_binding"
+      ],
+      "content": "## Rule: DOM ownership + state-driven updates\n\nNormative:\n- A gadget must not modify the global document DOM.\n- It must only manage its own gadget.element subtree.\n- All DOM writes MUST happen in onStateChange.\n- changeState is the gadget-level mutex; it is sequential.\n- onStateChange receives modification_dict containing only changed keys.\n\nStatic-check:\n- Forbid document.querySelector / querySelectorAll / getElementById / document.body.\n- Flag DOM writes (innerHTML, textContent, appendChild, classList.add/remove/toggle) outside onStateChange."
+    },
+    {
+      "id": "rules_api_005",
+      "doc_type": "rule",
+      "field_groups": [
+        "async_flow",
+        "event_binding"
+      ],
+      "content": "## Rule: always return promise chains\n\nNormative:\n- Always return the result of RSVP/RenderJS calls from handlers.\n- Breaking the chain causes silent failures and prevents cancellation.\n\nStatic-check:\n- In onEvent/declareMethod/declareService callbacks, verify return statement exists."
+    },
+    {
+      "id": "rules_api_002",
+      "doc_type": "rule",
+      "field_groups": [
+        "layout_html"
+      ],
+      "content": "## Rule: gadget = single HTML + HEAD dependencies\n\nNormative:\n- A gadget is defined by one HTML file with JS/CSS deps in HEAD.\n- HTML must include rsvp.js before renderjs.js.\n- Every gadget must be loadable as root gadget in browser.\n- Do not hide dependencies in runtime injection."
+    },
+    {
+      "id": "rules_api_015",
+      "doc_type": "api",
+      "field_groups": [
+        "state_logic"
+      ],
+      "content": "## API: onStateChange(callback)\n\nSignature: .onStateChange(function(modification_dict) { ... })\nNotes: DOM writes happen here. modification_dict contains only changed keys. this.state has the full updated state."
+    },
+    {
+      "id": "rules_api_014",
+      "doc_type": "api",
+      "field_groups": [
+        "state_logic"
+      ],
+      "content": "## API: changeState(patch_dict)\n\nSignature: this.changeState({key: newValue, ...}) -> RSVP.Queue\nNotes: Sequential mutex. Triggers onStateChange only if values actually changed. Returns queue that resolves when onStateChange completes."
+    },
+    {
+      "id": "rules_api_013",
+      "doc_type": "api",
+      "field_groups": [
+        "state_logic"
+      ],
+      "content": "## API: setState(initial_dict)\n\nSignature: .setState({key: value, ...})\nNotes: Sets default state once at init. Does NOT trigger onStateChange."
+    },
+    {
+      "id": "rules_api_016",
+      "doc_type": "api",
+      "field_groups": [
+        "event_binding"
+      ],
+      "content": "## API: onEvent(type, callback, use_capture, prevent_default)\n\nSignature: .onEvent(\"type\", function(evt) { return ...; }, false, true)\nNotes: Binds on gadget.element. Callback must return promise chain. Fourth arg true = preventDefault."
+    },
+    {
+      "id": "patterns_003",
+      "doc_type": "pattern",
+      "field_groups": [
+        "event_binding"
+      ],
+      "content": "## Pattern: form submit with prevent_default\n\nImplementation:\n- .onEvent(\"submit\", handler, false, true)\n  - Third arg (false) = useCapture\n  - Fourth arg (true) = preventDefault\n- Handler should changeState to \"loading\" first for immediate UI feedback.\n- Use var gadget = this; at top of handler for inner function access."
+    },
+    {
+      "id": "patterns_001",
+      "doc_type": "pattern",
+      "field_groups": [
+        "state_logic",
+        "event_binding"
+      ],
+      "content": "## Pattern: state-driven rendering skeleton\n\nGoal:\n- Keep DOM writes in onStateChange; event handlers only call changeState.\n\nImplementation:\n- .setState({key: defaultValue, ...})\n- .onEvent(type, function() { return this.changeState(patch); }, capture, preventDefault)\n- .onStateChange(function() { /* DOM writes using this.element.querySelector */ })\n\nAnti-patterns:\n- DOM writes inside onEvent, declareService, or declareMethod.\n- Reading this.state before setState is called."
+    },
+    {
+      "id": "code_examples_001",
+      "doc_type": "example",
+      "field_groups": [
+        "layout_html"
+      ],
+      "content": "## Example: minimal root gadget HTML\n\n​```html\n<!doctype html>\n<html>\n  <head>\n    <meta charset=\"utf-8\">\n    <script src=\"./rsvp.js\"></script>\n    <script src=\"./renderjs.js\"></script>\n    <script src=\"./gadget_minimal.js\"></script>\n  </head>\n  <body>\n    <div class=\"root\">Hello RenderJS</div>\n  </body>\n</html>\n​```\n\nNotes:\n- rsvp.js MUST come before renderjs.js in HEAD.\n- No id= attributes anywhere.\n- The paired JS file is referenced in HEAD."
+    },
+    {
+      "id": "code_examples_003",
+      "doc_type": "example",
+      "field_groups": [
+        "async_flow",
+        "event_binding"
+      ],
+      "content": "## Example: RSVP.Queue chain in submit handler\n\n​```javascript\n.onEvent(\"submit\", function () {\n  var gadget = this;\n  return new RSVP.Queue()\n    .push(function () {\n      return gadget.changeState({ loading: true, error: \"\" });\n    })\n    .push(function () {\n      /* TODO: call acquired method for actual submission */\n    })\n    .push(undefined, function (err) {\n      return gadget.changeState({ loading: false, error: String(err) });\n    });\n}, false, true)\n​```\n\nNotes:\n- Fourth arg true = prevent_default (important for form submit).\n- Error handler in .push(undefined, errorFn) pattern.\n- var gadget = this; needed because inner functions lose this context."
+    }
+  ],
+  "stats": {
+    "after_filter": 11,
+    "total_content_tokens_est": 645,
+    "raw_retrieved": 15,
+    "after_dedup": 15
+  },
+  "generation_contract": {
+    "allowed_api_names": [
+      "changeState",
+      "onEvent",
+      "onStateChange",
+      "setState"
+    ],
+    "recommended_pattern_ids": [
+      "patterns_003",
+      "patterns_001"
+    ],
+    "forbidden_patterns": [
+      ".then(",
+      "id=",
+      "document.querySelector",
+      "document.querySelectorAll",
+      "document.getElementById",
+      "document.body",
+      "window.X =",
+      "innerHTML =",
+      "outerHTML =",
+      "this.state =",
+      "state = state ||",
+      ".addEventListener(",
+      "onclick =",
+      "throw new Error("
+    ],
+    "required_slots": [
+      "state_init",
+      "dom_template",
+      "render_logic",
+      "event_bindings"
+    ],
+    "required_dom_selectors": [
+      ".login-form",
+      ".username-input",
+      ".password-input",
+      ".submit-btn",
+      ".error-msg",
+      ".login-area",
+      ".error-message"
+    ],
+    "required_state_keys": [
+      "error_message",
+      "is_submitting",
+      "password",
+      "username"
+    ],
+    "required_event_bindings": [
+      "submit"
+    ],
+    "allowed_todo_categories": [
+      "backend_call",
+      "auth",
+      "data_fetch",
+      "complex_validation"
+    ],
+    "fallback_policy": "emit_todo_marker",
+    "evidence_token_budget": 645,
+    "must_use_change_state": true,
+    "dom_updates_in_on_state_change": true,
+    "avoid_global_dom_selectors": true,
+    "emit_todo_for_unresolved_areas": true,
+    "unresolved_markers": [
+      "Add error message state",
+      "Add loading state",
+      "Add 'remember me' checkbox"
+    ]
+  }
+}

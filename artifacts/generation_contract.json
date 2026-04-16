@@ -1,0 +1,69 @@
+{
+  "allowed_api_names": [
+    "changeState",
+    "onEvent",
+    "onStateChange",
+    "setState"
+  ],
+  "recommended_pattern_ids": [
+    "patterns_003",
+    "patterns_001"
+  ],
+  "forbidden_patterns": [
+    ".then(",
+    "id=",
+    "document.querySelector",
+    "document.querySelectorAll",
+    "document.getElementById",
+    "document.body",
+    "window.X =",
+    "innerHTML =",
+    "outerHTML =",
+    "this.state =",
+    "state = state ||",
+    ".addEventListener(",
+    "onclick =",
+    "throw new Error("
+  ],
+  "required_slots": [
+    "state_init",
+    "dom_template",
+    "render_logic",
+    "event_bindings"
+  ],
+  "required_dom_selectors": [
+    ".login-form",
+    ".username-input",
+    ".password-input",
+    ".submit-btn",
+    ".error-msg",
+    ".login-area",
+    ".error-message"
+  ],
+  "required_state_keys": [
+    "error_message",
+    "is_submitting",
+    "password",
+    "username"
+  ],
+  "required_event_bindings": [
+    "submit"
+  ],
+  "allowed_todo_categories": [
+    "backend_call",
+    "auth",
+    "data_fetch",
+    "complex_validation"
+  ],
+  "fallback_policy": "emit_todo_marker",
+  "evidence_token_budget": 645,
+  "must_use_change_state": true,
+  "dom_updates_in_on_state_change": true,
+  "avoid_global_dom_selectors": true,
+  "emit_todo_for_unresolved_areas": true,
+  "unresolved_markers": [
+    "Add error message state",
+    "Add loading state",
+    "Add 'remember me' checkbox"
+  ]
+}

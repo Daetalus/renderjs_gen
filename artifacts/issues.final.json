@@ -1,0 +1,47 @@
+{
+  "issues": [
+    {
+      "issue_id": "ui_plan_synthesized:281d743113",
+      "severity": "info",
+      "category": "ui_plan_synthesized",
+      "path": "ui_plan",
+      "message": "ui_plan was empty, synthesized from state_schema and events.",
+      "synthesized_count": 5
+    },
+    {
+      "issue_id": "event_normalization:bb36b4091d",
+      "severity": "warning",
+      "category": "event_normalization",
+      "path": "events[0]",
+      "message": "Normalized event 'submit_login' to 'on_submit_login_area'."
+    },
+    {
+      "issue_id": "state_completion:f5de78362f",
+      "severity": "warning",
+      "category": "state_completion",
+      "path": "state_schema",
+      "message": "Auto-added missing state field 'error_message' (suggested by todo_markers)."
+    },
+    {
+      "issue_id": "state_completion:8698c8c6a6",
+      "severity": "warning",
+      "category": "state_completion",
+      "path": "state_schema",
+      "message": "Auto-added missing state field 'is_submitting' (suggested by todo_markers)."
+    },
+    {
+      "issue_id": "dom_completion:0aefe7e32c",
+      "severity": "warning",
+      "category": "dom_completion",
+      "path": "dom_requirements",
+      "message": "Auto-added DOM requirement '.login-area' (derived from event source_area_id)."
+    },
+    {
+      "issue_id": "dom_completion:f8872ff3ca",
+      "severity": "warning",
+      "category": "dom_completion",
+      "path": "dom_requirements",
+      "message": "Auto-added DOM requirement '.error-message' (derived from error state field)."
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "task_type": "form",
+  "page_goal": "A minimal login form with username, password, and a submit button.",
+  "assumptions": [],
+  "uncertainties": [],
+  "degradation_policy": {
+    "mode": "conservative",
+    "summary": ""
+  },
+  "ui_plan": [],
+  "component_whitelist_used": [],
+  "state_schema": [
+    {
+      "name": "username",
+      "field_type": "string",
+      "default": "",
+      "required": false,
+      "description": "The user's input for username"
+    },
+    {
+      "name": "password",
+      "field_type": "string",
+      "default": "",
+      "required": false,
+      "description": "The user's input for password"
+    }
+  ],
+  "events": [
+    {
+      "name": "submit_login",
+      "trigger": "submit",
+      "source_area_id": "login_area",
+      "handler_goal": "Submit credentials",
+      "updates_state": [],
+      "async_required": false
+    }
+  ],
+  "dom_requirements": [],
+  "data_requirements": [],
+  "async_requirements": [],
+  "child_gadget_needs": [],
+  "acquisition_needs": [],
+  "allowed_degradation": [
+    {
+      "condition": "No async backend provided",
+      "fallback": "Form performs local validation only"
+    }
+  ],
+  "todo_markers": [
+    "Add error message state",
+    "Add loading state",
+    "Add 'remember me' checkbox"
+  ]
+}
