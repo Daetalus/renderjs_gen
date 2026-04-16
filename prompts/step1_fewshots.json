@@ -1,0 +1,40 @@
+[
+  {
+    "input": "Create a login form with username, password, and a submit button. Show loading during submit and error on failure.",
+    "output": {
+      "task_type": "form",
+      "page_goal": "Login form with submit, loading, and error feedback.",
+      "assumptions": ["Only username and password fields needed.", "Login request deferred to async implementation."],
+      "uncertainties": ["No spec for remember-me option.", "No spec for post-login destination."],
+      "degradation_policy": {"mode": "strict", "summary": "Block submit on missing input; show error on failure."},
+      "ui_plan": [
+        {"area_id": "login_form", "title": "Login Form", "component_kind": "form", "purpose": "Collect credentials and submit"},
+        {"area_id": "feedback", "title": "Feedback", "component_kind": "notice", "purpose": "Show error or status"}
+      ],
+      "component_whitelist_used": ["page", "form", "input", "button", "notice", "loading_state"],
+      "state_schema": [
+        {"name": "username", "field_type": "string", "default": "", "required": true, "description": "Username input"},
+        {"name": "password", "field_type": "string", "default": "", "required": true, "description": "Password input"},
+        {"name": "is_submitting", "field_type": "boolean", "default": false, "required": true, "description": "Submit in progress"},
+        {"name": "error_message", "field_type": "string", "default": "", "required": true, "description": "Error text"}
+      ],
+      "events": [
+        {"name": "submit_login", "trigger": "submit", "source_area_id": "login_form", "handler_goal": "Validate and start login", "updates_state": ["is_submitting", "error_message"], "async_required": true}
+      ],
+      "dom_requirements": [
+        {"selector_hint": ".login-form", "element": "form", "purpose": "Login inputs and submit button", "required": true},
+        {"selector_hint": ".login-error", "element": "div", "purpose": "Error messages", "required": true}
+      ],
+      "data_requirements": [],
+      "async_requirements": [
+        {"name": "login_request", "trigger": "submit_login", "success_state": "is_submitting=false", "error_state": "is_submitting=false,error_message=error", "fallback": "keep values and allow retry"}
+      ],
+      "child_gadget_needs": [],
+      "acquisition_needs": [],
+      "allowed_degradation": [
+        {"condition": "service unavailable", "fallback": "show error and allow retry"}
+      ],
+      "todo_markers": ["Confirm post-login navigation."]
+    }
+  }
+]
