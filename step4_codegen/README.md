@@ -15,7 +15,7 @@ python -m step4_codegen.main \
   --spec ./component_spec.final.json \
   --evidence ./evidence_pack.json \
   --out-dir ./generated \
-  --base-url http://localhost \
+  --base-url http://localhost:8080/v1 \
   --model 'bartowski/google_gemma-4-26B-A4B-it-GGUF:IQ4_XS' \
   --api-key 'YOUR_KEY' \
   --timeout 120

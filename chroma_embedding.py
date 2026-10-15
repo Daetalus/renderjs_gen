@@ -7,7 +7,7 @@ from chromadb.api.types import Documents, EmbeddingFunction, Embeddings
 from embedding_client import EmbeddingGemmaClient
 
 
-DEFAULT_EMBEDDING_BASE_URL = "http://localhost"
+DEFAULT_EMBEDDING_BASE_URL = os.environ.get("EMBED_BASE_URL", "http://localhost:8081/v1")
 DEFAULT_EMBEDDING_MODEL = "embeddinggemma"
 DEFAULT_TIMEOUT = 30.0
 

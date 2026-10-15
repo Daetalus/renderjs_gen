@@ -3,12 +3,13 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 import json
 import time
+import os
 from typing import Any, Callable, Mapping
 
 import requests
 
 
-DEFAULT_INFERENCE_BASE_URL = "http://localhost"
+DEFAULT_EMBEDDING_BASE_URL = os.environ.get("EMBED_BASE_URL", "http://localhost:8081/v1")
 DEFAULT_INFERENCE_MODEL = "bartowski/google_gemma-4-26B-A4B-it-GGUF:IQ4_XS"
 DEFAULT_TIMEOUT = 120.0
 

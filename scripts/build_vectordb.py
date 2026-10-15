@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import re
+import os
 import sys
 from dataclasses import dataclass
 from pathlib import Path
@@ -21,7 +22,7 @@ from embedding_client import EmbeddingClientError, EmbeddingGemmaClient
 DEFAULT_CORPUS_DIR = PROJECT_ROOT / "corpus"
 DEFAULT_PERSIST_DIR = PROJECT_ROOT / "chroma_db"
 DEFAULT_COLLECTION = "renderjs_poc_v3"
-DEFAULT_EMBEDDING_URL = "http://localhost"
+DEFAULT_EMBEDDING_BASE_URL = os.environ.get("EMBED_BASE_URL", "http://localhost:8081/v1")
 
 CORPUS_FILES: tuple[str, ...] = (
     "renderjs_corpus_api_rules.md",
