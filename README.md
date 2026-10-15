@@ -63,7 +63,7 @@ Implemented:
 - local ChromaDB-backed evidence retrieval
 - fragment-based Step4 generation
 - static validation of generated HTML and JS
-- committed example output under [`artifacts/`](/home/sun/workspace/renderjs_gen/artifacts)
+- committed example output under [`artifacts/`](artifacts/)
 
 Not implemented yet:
 
@@ -96,7 +96,7 @@ renderjs_gen/
 
 ## Dependencies
 
-Main dependencies are listed in [`requirements.txt`](/home/sun/workspace/renderjs_gen/requirements.txt).
+Main dependencies are listed in [`requirements.txt`](requirements.txt).
 
 This repository currently uses:
 
@@ -231,7 +231,7 @@ A visible example pipeline result is committed under
 Run the focused regression suite:
 
 ```bash
-./venv/bin/python -m pytest \
+python -m pytest \
   tests/test_step1_node.py \
   tests/test_step2_node.py \
   tests/test_step3_node.py \
