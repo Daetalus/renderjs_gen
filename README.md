@@ -1,3 +1,6 @@
+> **Copyright © 2025 Nexedi SA.** Developed by Boxiang Sun at Nexedi and published with Nexedi's permission.
+> Originally hosted on Nexedi's GitLab; full commit history preserved.
+
 # RenderJS Code Generator
 
 A workflow-based code generator for single-gadget RenderJS pages.
